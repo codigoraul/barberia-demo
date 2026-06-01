@@ -281,8 +281,8 @@
       const modal = document.getElementById('edit-barber-modal');
       const form = document.getElementById('edit-barber-form');
       
-      // Establecer ruta dinámicamente usando el helper de rutas de Laravel
-      form.action = "{{ route('admin.specialists.update', ':id') }}".replace(':id', barber.id);
+      // Establecer ruta de forma 100% segura usando la ruta actual de navegación del navegador
+      form.action = `${window.location.pathname}/${barber.id}`;
       
       // Poblar campos
       document.getElementById('edit-barber-name').value = barber.name;

@@ -152,8 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Recopilar todos los datos del formulario
     const formData = new FormData(bookingForm);
 
-    // Enviar petición POST asíncrona hacia Laravel
-    fetch('/reservar', {
+    // Enviar petición POST asíncrona hacia Laravel a la misma ruta actual de navegación
+    fetch(window.location.pathname, {
       method: 'POST',
       headers: {
         'X-Requested-With': 'XMLHttpRequest', // Indica que es petición AJAX

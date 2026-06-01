@@ -25,6 +25,8 @@ jobs:
       run: |
         npm ci
         npm run build
+        # Copiar el contenido de public/ al raíz para compatibilidad con hosting compartido (cPanel)
+        cp -r public/* ./
 
     - name: 📂 Desplegar archivos por FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
