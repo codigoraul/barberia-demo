@@ -1,0 +1,55 @@
+name: Deploy Barberia via FTP 🚀
+
+on:
+  push:
+    branches:
+      - main
+      - master # Soporta tanto 'main' como 'master'
+
+jobs:
+  web-deploy:
+    name: Build & Deploy 💈
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📂 Obtener Código Fuente
+      uses: actions/checkout@v4
+
+    - name: 🟢 Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-size: 20
+        cache: 'npm'
+
+    - name: 📦 Instalar dependencias y compilar recursos (Vite)
+      run: |
+        npm ci
+        npm run build
+
+    - name: 📂 Desplegar archivos por FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        # Ruta en tu servidor cPanel (Ajusta 'public_html/barberia-demo' según corresponda)
+        server-dir: public_html/barberia-demo/
+        # Archivos y carpetas a excluir del despliegue para optimizar velocidad y seguridad
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/.github*/**
+          **/node_modules/**
+          **/tests/**
+          **/phpunit.xml
+          **/vite.config.js
+          **/package.json
+          **/package-lock.json
+          **/.env.example
+          **/README.md
+          **/composer.json
+          **/composer.lock
+          # NOTA: Omitimos 'vendor' y '.env' de la sincronización automática.
+          # Debes subir tu archivo .env directamente a la carpeta del servidor.
+          # La carpeta 'vendor' se sube una sola vez o se instala vía terminal en cPanel.
+          **/vendor/**
