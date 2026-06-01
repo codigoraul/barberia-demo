@@ -32,8 +32,8 @@ jobs:
         server: ${{ secrets.FTP_SERVER }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        # Ruta en tu servidor cPanel (Ajusta 'public_html/barberia-demo' según corresponda)
-        server-dir: public_html/barberia-demo/
+        # Ruta en tu servidor cPanel (Dado que tu FTP ya inicia en public_html)
+        server-dir: barberia-demo/
         # Archivos y carpetas a excluir del despliegue para optimizar velocidad y seguridad
         exclude: |
           **/.git*
