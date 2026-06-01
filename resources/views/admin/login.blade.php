@@ -29,26 +29,17 @@
           <div class="form-field">
             <label for="input-email" class="field-label">Correo Electrónico</label>
             <input type="email" id="input-email" name="email" class="form-input" 
-                   value="{{ old('email', 'admin@barberia.com') }}" placeholder="ejemplo@barberia.com" required>
+                   value="{{ old('email') }}" placeholder="ejemplo@barberia.com" required>
           </div>
 
           <div class="form-field">
             <label for="input-password" class="field-label">Contraseña</label>
             <input type="password" id="input-password" name="password" class="form-input" 
-                   value="admin" placeholder="••••••••" required>
+                   placeholder="••••••••" required>
           </div>
 
           <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
         </form>
-
-        <!-- Recordatorio de credenciales de prueba -->
-        <div class="test-credentials-box">
-          <strong>🔑 Acceso de Prueba Precargado:</strong>
-          <ul>
-            <li>Usuario: <code>admin@barberia.com</code></li>
-            <li>Contraseña: <code>admin</code></li>
-          </ul>
-        </div>
       </div>
     </div>
   </section>
