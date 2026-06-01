@@ -54,7 +54,5 @@ jobs:
           **/README.md
           **/composer.json
           **/composer.lock
-          # NOTA: Omitimos 'vendor' y '.env' de la sincronización automática.
+          # NOTA: Omitimos '.env' de la sincronización automática.
           # Debes subir tu archivo .env directamente a la carpeta del servidor.
-          # La carpeta 'vendor' se sube una sola vez o se instala vía terminal en cPanel.
-          **/vendor/**
