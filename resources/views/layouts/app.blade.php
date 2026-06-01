@@ -11,8 +11,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   
-  <!-- Hoja de Estilos -->
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+  <!-- Hoja de Estilos (Con Cache Busting) -->
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}?v=1.1">
   @yield('styles')
 </head>
 <body>
