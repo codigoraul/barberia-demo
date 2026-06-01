@@ -7,7 +7,7 @@
   <section id="hero" class="hero-section">
     <div class="hero-container">
       <div class="hero-content">
-        <span class="hero-tagline">Estilo Callejero & Actitud Urbana</span>
+        <span class="hero-tagline">⚡ Estilo Callejero & Actitud Urbana 💈</span>
         <h1 class="hero-title">
           <span class="hero-title-text">
             Saca tu mejor versión:<br>
