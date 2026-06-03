@@ -160,6 +160,43 @@ class AdminController extends Controller
                 . "📍 *Ubicación:* Av. Vitacura 4500, Vitacura.\n\n"
                 . "_Te sugerimos llegar 5 minutos antes. ¡Nos vemos!_";
 
+            // Enviar correo real al cliente en producción usando mail() de PHP (compatible con cPanel)
+            try {
+                $emailClientSubject = "Confirmación de Cita - The Noble Groom";
+                $emailClientContent = "<div style='font-family: Montserrat, sans-serif; padding: 20px; background-color: #FAF8F5; border: 1px solid #E5DCC6; max-width: 600px; margin: 0 auto;'>"
+                    . "<div style='text-align: center; margin-bottom: 20px;'>"
+                    . "<h2 style='font-family: Outfit, sans-serif; font-weight: 900; color: #000; letter-spacing: -0.02em; margin-bottom: 5px; text-transform: uppercase; margin-top: 0;'>THE NOBLE GROOM</h2>"
+                    . "<p style='color: #C5A880; font-weight: bold; margin-top: 0; letter-spacing: 0.15em; font-size: 0.85rem; text-transform: uppercase;'>Barbería & Peluquería Premium</p>"
+                    . "</div>"
+                    . "<h3 style='color: #000; font-family: Outfit, sans-serif; text-transform: uppercase; font-weight: 800; border-bottom: 1px solid #E5DCC6; padding-bottom: 10px;'>¡Tu cita ha sido confirmada!</h3>"
+                    . "<p>Hola <strong>{$appointment->customer_name}</strong>,</p>"
+                    . "<p>Nos complace informarte que tu reserva ha sido confirmada con éxito por nuestro equipo. Te esperamos en la fecha y hora seleccionada para brindarte la mejor experiencia premium.</p>"
+                    . "<hr style='border: 0; border-top: 1px solid #E5DCC6; margin: 15px 0;'>"
+                    . "<table style='width: 100%; border-collapse: collapse; margin-bottom: 15px;'>"
+                    . "<tr><td style='padding: 8px 0; color: #666;'><strong>💇‍♂️ Servicio:</strong></td><td style='padding: 8px 0; font-weight: bold;'>{$service->name}</td></tr>"
+                    . "<tr><td style='padding: 8px 0; color: #666;'><strong>💈 Barbero:</strong></td><td style='padding: 8px 0;'>{$specialist->name}</td></tr>"
+                    . "<tr><td style='padding: 8px 0; color: #666;'><strong>📅 Fecha:</strong></td><td style='padding: 8px 0;'><strong>" . $appointment->date->format('d/m/Y') . "</strong></td></tr>"
+                    . "<tr><td style='padding: 8px 0; color: #666;'><strong>🕒 Hora:</strong></td><td style='padding: 8px 0;'><strong>" . substr($appointment->time, 0, 5) . " hrs</strong></td></tr>"
+                    . "<tr><td style='padding: 8px 0; color: #666;'><strong>💰 Precio Total:</strong></td><td style='padding: 8px 0; color: #C5A880; font-weight: bold;'>$" . number_format($appointment->total_price, 0, ',', '.') . "</td></tr>"
+                    . "</table>"
+                    . "<div style='background-color: #EBECEF; padding: 15px; text-align: center; border-radius: 4px; margin-bottom: 15px;'>"
+                    . "<strong style='color: #000; display: block; margin-bottom: 5px;'>📍 Ubicación de la Barbería</strong>"
+                    . "<span style='font-size: 0.9rem; color: #1D1D1F;'>Av. Vitacura 4500, Vitacura, Santiago</span>"
+                    . "</div>"
+                    . "<p style='font-size: 0.85rem; color: #777; line-height: 1.5; text-align: center;'>Te sugerimos llegar 5 minutos antes de tu cita. Si deseas cancelar o reprogramar, por favor contáctanos con al menos 2 horas de anticipación.</p>"
+                    . "<hr style='border: 0; border-top: 1px solid #E5DCC6; margin: 15px 0;'>"
+                    . "<p style='font-size: 0.8rem; color: #999; text-align: center; margin-bottom: 0;'>© " . date('Y') . " The Noble Groom. Todos los derechos reservados.</p>"
+                    . "</div>";
+
+                $clientHeaders = "MIME-Version: 1.0" . "\r\n";
+                $clientHeaders .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+                $clientHeaders .= 'From: The Noble Groom <noreply@aplicacionweb.cl>' . "\r\n";
+                
+                mail($appointment->customer_email, $emailClientSubject, $emailClientContent, $clientHeaders);
+            } catch (\Exception $e) {
+                // Silenciar errores
+            }
+
             $request->session()->flash('notification_sent', [
                 'barber_name' => $specialist->name,
                 'customer_name' => $appointment->customer_name,
