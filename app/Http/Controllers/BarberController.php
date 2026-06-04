@@ -6,6 +6,7 @@ use App\Models\Service;
 use App\Models\Specialist;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 
 class BarberController extends Controller
@@ -76,7 +77,7 @@ class BarberController extends Controller
         // Cargar las relaciones para retornar el recibo completo
         $appointment->load(['service', 'specialist']);
 
-        // Enviar correo de confirmación de recepción de cita usando la función mail() de PHP
+        // Enviar correo de confirmación de recepción de cita usando la fachada Mail de Laravel (SMTP)
         try {
             $emailSubject = "Reserva Recibida (Pendiente de Confirmación) - The Noble Groom";
             $emailContent = "<div style='font-family: Montserrat, sans-serif; padding: 20px; background-color: #FAF8F5; border: 1px solid #E5DCC6; max-width: 600px; margin: 0 auto;'>"
@@ -99,11 +100,10 @@ class BarberController extends Controller
                 . "<p style='font-size: 0.8rem; color: #999; text-align: center; margin-bottom: 0;'>© " . date('Y') . " The Noble Groom. Todos los derechos reservados.</p>"
                 . "</div>";
 
-            $headers = "MIME-Version: 1.0" . "\r\n";
-            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-            $headers .= 'From: The Noble Groom <noreply@aplicacionweb.cl>' . "\r\n";
-            
-            mail($appointment->customer_email, $emailSubject, $emailContent, $headers);
+            Mail::html($emailContent, function ($message) use ($appointment, $emailSubject) {
+                $message->to($appointment->customer_email)
+                        ->subject($emailSubject);
+            });
         } catch (\Exception $e) {
             // Silenciar errores
         }

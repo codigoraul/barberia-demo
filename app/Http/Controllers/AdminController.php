@@ -8,6 +8,7 @@ use App\Models\Specialist;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class AdminController extends Controller
 {
@@ -160,7 +161,7 @@ class AdminController extends Controller
                 . "📍 *Ubicación:* Av. Vitacura 4500, Vitacura.\n\n"
                 . "_Te sugerimos llegar 5 minutos antes. ¡Nos vemos!_";
 
-            // Enviar correo real al cliente en producción usando mail() de PHP (compatible con cPanel)
+            // Enviar correo real al cliente en producción usando la fachada Mail de Laravel (SMTP)
             try {
                 $emailClientSubject = "Confirmación de Cita - The Noble Groom";
                 $emailClientContent = "<div style='font-family: Montserrat, sans-serif; padding: 20px; background-color: #FAF8F5; border: 1px solid #E5DCC6; max-width: 600px; margin: 0 auto;'>"
@@ -188,11 +189,10 @@ class AdminController extends Controller
                     . "<p style='font-size: 0.8rem; color: #999; text-align: center; margin-bottom: 0;'>© " . date('Y') . " The Noble Groom. Todos los derechos reservados.</p>"
                     . "</div>";
 
-                $clientHeaders = "MIME-Version: 1.0" . "\r\n";
-                $clientHeaders .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-                $clientHeaders .= 'From: The Noble Groom <noreply@aplicacionweb.cl>' . "\r\n";
-                
-                mail($appointment->customer_email, $emailClientSubject, $emailClientContent, $clientHeaders);
+                Mail::html($emailClientContent, function ($message) use ($appointment, $emailClientSubject) {
+                    $message->to($appointment->customer_email)
+                            ->subject($emailClientSubject);
+                });
             } catch (\Exception $e) {
                 // Silenciar errores
             }
